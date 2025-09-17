@@ -19,6 +19,7 @@
         }
 
 ```
+    /* Optimized animations - reduce motion for performance */
     * {
         margin: 0;
         padding: 0;
@@ -37,6 +38,22 @@
         font-family: 'Cormorant Garamond', serif;
     }
 
+    /* Performance optimizations */
+    img {
+        will-change: auto;
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     /* Header */
     .header {
         position: fixed;
@@ -46,7 +63,7 @@
         backdrop-filter: blur(20px);
         z-index: 1000;
         border-bottom: 1px solid var(--soft-gray);
-        transition: all 0.4s ease;
+        transition: background 0.3s ease;
     }
 
     .nav {
@@ -119,11 +136,16 @@
         font-weight: 300;
     }
 
+    .hero-actions {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
     .cta-button {
         display: inline-block;
         padding: 1rem 2.5rem;
-        background: var(--charcoal);
-        color: var(--off-white);
         text-decoration: none;
         font-weight: 400;
         font-size: 0.95rem;
@@ -132,9 +154,114 @@
         border: 1px solid var(--charcoal);
     }
 
-    .cta-button:hover {
+    .cta-button.primary {
+        background: var(--charcoal);
+        color: var(--off-white);
+    }
+
+    .cta-button.primary:hover {
         background: transparent;
         color: var(--charcoal);
+    }
+
+    .cta-button.secondary {
+        background: transparent;
+        color: var(--champagne);
+        border-color: var(--champagne);
+    }
+
+    .cta-button.secondary:hover {
+        background: var(--champagne);
+        color: var(--charcoal);
+    }
+
+    /* Style Board Preview Section */
+    .style-board-preview {
+        padding: 6rem 2rem;
+        background: var(--warm-white);
+    }
+
+    .preview-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+    }
+
+    .preview-text h2 {
+        font-size: 2.5rem;
+        font-weight: 400;
+        color: var(--charcoal);
+        margin-bottom: 1.5rem;
+    }
+
+    .preview-text p {
+        color: var(--slate);
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    .preview-features {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .feature-point {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: var(--slate);
+    }
+
+    .feature-icon {
+        font-size: 1.2rem;
+        width: 2rem;
+    }
+
+    .preview-cta {
+        color: var(--champagne);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.1rem;
+        transition: opacity 0.3s ease;
+    }
+
+    .preview-cta:hover {
+        opacity: 0.7;
+    }
+
+    .style-board-mockup {
+        background: var(--off-white);
+        border-radius: 20px;
+        padding: 3rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        box-shadow: 0 20px 60px rgba(74, 85, 104, 0.1);
+    }
+
+    .mockup-slot {
+        background: white;
+        border: 2px solid var(--soft-gray);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .mockup-slot:hover {
+        border-color: var(--champagne);
+        transform: scale(1.02);
+    }
+
+    .mockup-item {
+        font-size: 3rem;
+        opacity: 0.8;
     }
 
     /* Gallery Section */
@@ -416,6 +543,15 @@
         .gallery-grid { grid-template-columns: 1fr; gap: 3rem; }
         .lookbook-spread { grid-template-columns: 1fr; gap: 3rem; }
         .section-header h2 { font-size: 2.5rem; }
+        .preview-content { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+        .hero-actions { flex-direction: column; gap: 1rem; }
+        .form-row { grid-template-columns: 1fr; }
+        .wardrobe-header { text-align: center; flex-direction: column; }
+        .wardrobe-header h2 { font-size: 2.5rem; }
+        .outfit-workspace { grid-template-columns: 1fr; gap: 3rem; }
+        .outfit-canvas { grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .outfit-slot[data-type="dresses"] { grid-column: 1 / 3; }
+        .outfit-slot.accessories-slot { grid-column: 1 / 3; }
     }
 
     /* Smooth scroll behavior */
@@ -457,7 +593,51 @@
     <div class="hero-content fade-in">
         <h1 class="serif">Atelier Reimagined</h1>
         <p class="tagline">Where timeless design meets conscious style.</p>
-        <a href="#gallery" class="cta-button">Enter the Gallery</a>
+        <div class="hero-actions">
+            <a href="#gallery" class="cta-button primary">Enter the Gallery</a>
+            <a href="#" onclick="showOutfitCreator(); return false;" class="cta-button secondary">Style Board</a>
+        </div>
+    </div>
+</section>
+
+<!-- Style Board Preview Section -->
+<section class="style-board-preview">
+    <div class="preview-content fade-in">
+        <div class="preview-text">
+            <h2 class="serif">Create Your Perfect Look</h2>
+            <p>Mix and match pieces from your wardrobe to discover new styling possibilities. Our digital styling board lets you experiment with combinations before you wear them.</p>
+            <div class="preview-features">
+                <div class="feature-point">
+                    <span class="feature-icon">✨</span>
+                    <span>Drag & drop styling</span>
+                </div>
+                <div class="feature-point">
+                    <span class="feature-icon">💾</span>
+                    <span>Save favorite looks</span>
+                </div>
+                <div class="feature-point">
+                    <span class="feature-icon">🎲</span>
+                    <span>Discover new combinations</span>
+                </div>
+            </div>
+            <a href="#" onclick="showOutfitCreator(); return false;" class="preview-cta">Try Style Board →</a>
+        </div>
+        <div class="preview-visual">
+            <div class="style-board-mockup">
+                <div class="mockup-slot">
+                    <div class="mockup-item">🧥</div>
+                </div>
+                <div class="mockup-slot">
+                    <div class="mockup-item">👕</div>
+                </div>
+                <div class="mockup-slot">
+                    <div class="mockup-item">👖</div>
+                </div>
+                <div class="mockup-slot">
+                    <div class="mockup-item">👠</div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1838,46 +2018,103 @@
         });
     });
 
-    // Parallax effect
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallaxElements = document.querySelectorAll('.parallax-section');
-        
-        parallaxElements.forEach(element => {
-            const speed = 0.3;
-            element.style.transform = `translateY(${scrolled * speed}px)`;
-        });
-    });
-
-    // Fade in animation
+    // Performance optimizations
     const observerOptions = {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        rootMargin: '0px 0px -30px 0px'
     };
 
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                // Unobserve after animation to save performance
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    document.querySelectorAll('.fade-in').forEach(el => {
-        observer.observe(el);
+    // Throttled scroll handler for better performance
+    let ticking = false;
+    function updateOnScroll() {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrolled = window.pageYOffset;
+                
+                // Header background
+                const header = document.querySelector('.header');
+                if (scrolled > 50) {
+                    header.style.background = 'rgba(253, 252, 249, 0.98)';
+                } else {
+                    header.style.background = 'rgba(253, 252, 249, 0.95)';
+                }
+
+                // Reduced parallax effect for performance
+                const parallaxElements = document.querySelectorAll('.parallax-section');
+                parallaxElements.forEach(element => {
+                    const speed = 0.1; // Reduced from 0.3
+                    element.style.transform = `translate3d(0, ${scrolled * speed}px, 0)`;
+                });
+                
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
     });
 
-    // Header background on scroll
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('.header');
-        if (window.scrollY > 50) {
-            header.style.background = 'rgba(253, 252, 249, 0.98)';
-            header.style.borderBottomColor = 'rgba(226, 232, 240, 0.8)';
-        } else {
-            header.style.background = 'rgba(253, 252, 249, 0.95)';
-            header.style.borderBottomColor = 'var(--soft-gray)';
-        }
+    // Optimized fade-in animation setup
+    document.addEventListener('DOMContentLoaded', function() {
+        // Observe fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add navigation links with debounced click handlers
+        const navLinks = document.querySelector('.nav-links');
+        
+        const wardrobeLink = document.createElement('li');
+        wardrobeLink.innerHTML = '<a href="#" onclick="showPersonalWardrobe(); return false;">My Wardrobe</a>';
+        navLinks.appendChild(wardrobeLink);
+
+        const outfitLink = document.createElement('li');
+        outfitLink.innerHTML = '<a href="#" onclick="showOutfitCreator(); return false;">Style Board</a>';
+        navLinks.appendChild(outfitLink);
+
+        // Setup optimized drag and drop with delay to prevent render blocking
+        setTimeout(() => {
+            const slots = document.querySelectorAll('.outfit-slot');
+            slots.forEach(slot => {
+                slot.addEventListener('dragover', handleDragOver, { passive: false });
+                slot.addEventListener('drop', handleDrop, { passive: false });
+                slot.addEventListener('dragenter', handleDragEnter, { passive: true });
+                slot.addEventListener('dragleave', handleDragLeave, { passive: true });
+            });
+        }, 1000);
+
+        // Load existing data without blocking
+        requestIdleCallback(() => {
+            if (personalWardrobe.length > 0) {
+                updateWardrobeStats();
+            }
+        });
     });
+
+    // Use passive scroll listener for better performance
+    window.addEventListener('scroll', updateOnScroll, { passive: true });
 
     // Gallery item interactions
     document.querySelectorAll('.gallery-item').forEach(item => {
